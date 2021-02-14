@@ -1,6 +1,7 @@
+<a href="newThread.php" class="btn btn-primary text-decoration-none mb-4">スレッドを新規作成する</a>
 <h2 class="h3 mb-4">スレッド選択</h2>
-<a href="newThread.php" class="btn btn-primary text-decoration-none mb-4">スレッドを作成する</a>
-<?php if (isset($selectThreads)) : ?>
+<?php if (count($selectThreads)) : ?>
+<p class="text-danger">見たいスレッドをクリックしてください</p>
     <?php foreach ($selectThreads as $thread) : ?>
         <section class="card shadow-sm mb-4">
             <div class="card-body">
@@ -13,5 +14,5 @@
         </section>
     <?php endforeach; ?>
 <?php else : ?>
-    <p class="text-danger">スレッドが作成されていません</p>
+    <p class="text-danger">スレッドが作成されていません。上記のボタンからスレッドを作成してください。</p>
 <?php endif; ?>

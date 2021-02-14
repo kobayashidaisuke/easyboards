@@ -4,9 +4,9 @@ session_start();
 $e = "";
 
 if (isset($_SESSION["NICKNAME"])) {
-  $e = 'Logoutしました。';
+  $e = 'ログアウトしました。';
 } else {
-  $e = 'SessionがTimeoutしました。';
+  $e = 'セッションがタイムアウトしました。';
 }
 
 //セッション変数のクリア

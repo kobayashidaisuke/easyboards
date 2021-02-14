@@ -2,7 +2,7 @@
 include_once __DIR__ . '/lib/escape.php';
 session_start();
 
-$title = 'ログイン';
+$title = '掲示板';
 $login = [
   'email' => '',
 ];

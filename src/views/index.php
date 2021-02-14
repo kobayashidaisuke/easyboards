@@ -23,7 +23,7 @@
             </div>
             <div class="form-group mb-4">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control">
+                <input type="text" name="password" id="password" class="form-control">
             </div>
             <input type="submit" class="btn btn-primary mb-4 text-light" value="ログイン"></input>
         </form>

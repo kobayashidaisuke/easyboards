@@ -10,6 +10,8 @@
         </section>
     <?php endif; ?>
     <form method="post" action="newThread.php" class="mb-4">
+        <h3 class="h4">スレッドは作成したら、編集や削除ができません。</h3>
+        <h3 class="h4 mb-4">慎重に記入してください。</h3>
         <input name="chkno" type="hidden" value="<?= h($chkno); ?>">
         <input name="token" type="hidden" value="<?= h($token); ?>">
         <div class="form-group mb-4">

@@ -3,7 +3,7 @@
             <div class="mb-4">
                 <h3 class="h4">使い方</h3>
                 <ol>
-                    <li class="mb-2">任意の名前、本文、パスワードを入力して新規投稿のボタンを押してください。</li>
+                    <li class="mb-2">任意の名前、コメント、パスワードを入力して新規投稿のボタンを押してください。パスワードは削除、編集をする際に必要になります。</li>
                     <li class="mb-2">投稿を削除する場合、削除するIDと設定したパスワードを入力して削除ボタンを押してください。</li>
                     <li class="mb-2">投稿を編集する場合、編集するIDと設定したパスワードを入力して編集ボタンを押してください。変更前のデータが新規投稿フォームに反映されます。任意のデータを入力し、新規投稿ボタンを押すと内容が変更されます。</li>
                 </ol>
@@ -76,7 +76,7 @@
                 <div class="form-group mb-4">
                     <label for="pass">パスワード</label>
                     <input type="text" name="pass" placeholder="パスワード" id="pass" class="form-control" value="<?= h($editPass); ?>">
-                    <input type="submit" name="submit" class="btn btn-primary mt-2" value="新規投稿">
+                    <input type="submit" name="submit" class="btn btn-primary mt-2" value="送信">
                 </div>
                 <input type="hidden" name="editPost" value="<?= h($editNum); ?>">
                 <input type="hidden" name="id" value="<?= h($id); ?>">
@@ -84,8 +84,9 @@
             </form>
         </div>
         <section class="col-md-3 col-sm-12 mb-4 bg-light">
-            <h4 class="h4">他のスレッド</h4>
-            <?php if (isset($selectThreads)) : ?>
+            <h4 class="h4 mb-4">他のスレッド</h4>
+            <a href="top.php" class="btn btn-primary d-block mb-2">スレッド一覧に戻る</a>
+            <?php if (count($selectThreads)) : ?>
                 <ol>
                     <?php foreach ($selectThreads as $thread) : ?>
                         <li><a href="thread.php?id=<?= h($thread['id']); ?>" class="btn btn-link h5 p-0"><?= h($thread['title']); ?></a></li>
