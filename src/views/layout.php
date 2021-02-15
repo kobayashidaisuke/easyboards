@@ -22,7 +22,7 @@
     </div>
     <footer class="footer bg-dark text-light p-4 mt-4">
         <div class="container text-center">
-            <p>Copyright&nbsp;&copy;&nbsp;2021&nbsp;DaisukeKobayashi&nbsp;all&nbsp;right&nbsp;reserved.</p>
+            <p>Copyright&nbsp;&copy;&nbsp;2021&nbsp;DaisukeKobayashi&nbsp;All&nbsp;rights&nbsp;reserved.</p>
         </div>
     </footer>
 </body>
