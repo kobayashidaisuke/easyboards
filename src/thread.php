@@ -29,16 +29,16 @@ function fileCheck()
 {
   $errors = [];
   //エラーチェック
-  switch ($_FILES['upfile']['error']) {
-    case UPLOAD_ERR_OK: // OK
-      break;
-    case UPLOAD_ERR_NO_FILE: // 未選択
-      $errors['upfile'] = 'ファイルが選択されていません';
-    case UPLOAD_ERR_INI_SIZE: // php.ini定義の最大サイズ超過
-      $errors['upfile'] = 'ファイルサイズが大きすぎます';
-    default:
-      $errors['upfile'] = 'その他のエラーが発生しました';
+  if ($_FILES['upfile']['error'] === UPLOAD_ERR_NO_FILE) {
+    $errors['upfile'] = 'ファイルが選択されていません';
+  } elseif ($_FILES['upfile']['error'] === UPLOAD_ERR_INI_SIZE) {
+    $errors['upfile'] = 'ファイルサイズが大きすぎます';
+  } elseif ($_FILES['upfile']['error'] === UPLOAD_ERR_OK) {
+    //OK
+  } else {
+    $errors['upfile'] = 'その他のエラーが発生しました';
   }
+
   //画像・動画フォルダまでのパス
   $tmpfile = $_FILES['upfile']['tmp_name'];
   $filepass = 'gallery/' . $_FILES['upfile']['name'];
