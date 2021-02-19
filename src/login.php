@@ -49,7 +49,7 @@ function validate($emails)
     return $errors;
   } elseif (!strlen($_POST['email'])) {
     $errors['email'] = "メールアドレスを入力してください";
-  } elseif (mb_strlen($_POST['email']) > 50) {
+  } elseif (mb_strlen($_POST['email']) > MAXIMUM_LENGTH_50) {
     $errors['email'] = "メールアドレスを50文字以下で入力してください";
   } elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
     $errors['email'] = "入力された値が不正です";

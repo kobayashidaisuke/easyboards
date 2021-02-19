@@ -58,7 +58,7 @@ function validate($link)
         return $errors;
     } elseif (!strlen($_POST['email']) || !strlen($_POST['email-2'])) {
         $errors['email'] = "メールアドレスを入力してください";
-    } elseif (mb_strlen($_POST['email']) > 50 || mb_strlen($_POST['email-2']) > 50) {
+    } elseif (mb_strlen($_POST['email']) > MAXIMUM_LENGTH_50 || mb_strlen($_POST['email-2']) > MAXIMUM_LENGTH_50) {
         $errors['email'] = "メールアドレスを50文字以下で入力してください";
     } elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "入力された値が不正です";
@@ -73,14 +73,14 @@ function validate($link)
         return $errors;
     } elseif (!isset($_POST['nickname'])) {
         $errors['nickname'] = ' ニックネームを入力してください';
-    } elseif (mb_strlen($_POST['nickname']) > 50) {
+    } elseif (mb_strlen($_POST['nickname']) > MAXIMUM_LENGTH_50) {
         $errors['nickname'] = 'ニックネームは50字以下で入力してください';
     }
 
     //パスワード
     if (!preg_match("/\A(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}+\z/i", $_POST['password'])) {
         $errors['password'] = 'パスワードは半角英数字をそれぞれ1文字以上含んだ8文字以上で設定してください';
-    } elseif (mb_strlen($_POST['password']) > 50) {
+    } elseif (mb_strlen($_POST['password']) > MAXIMUM_LENGTH_50) {
         $errors['password'] = 'パスワードを50字以下で入力してください';
     }
 

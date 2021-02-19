@@ -9,17 +9,17 @@ function validateStandard($info)
   $errors = [];
   if (!strlen($info['name'])) {
     $errors['name'] = '名前を入力してください';
-  } elseif (mb_strlen($info['name']) > 50) {
+  } elseif (mb_strlen($info['name']) > MAXIMUM_LENGTH_50) {
     $errors['name'] = '名前は50字以下で入力してください';
   }
   if (!strlen($info['comment'])) {
     $errors['comment'] = 'コメントを入力してください';
-  } elseif (mb_strlen($info['comment']) > 200) {
+  } elseif (mb_strlen($info['comment']) > MAXIMUM_LENGTH_200) {
     $errors['comment'] = 'コメントは200字以下で入力してください';
   }
   if (!strlen($info['pass'])) {
     $errors['pass'] = 'パスワードを入力してください';
-  } elseif (mb_strlen($info['pass']) > 50) {
+  } elseif (mb_strlen($info['pass']) > MAXIMUM_LENGTH_50) {
     $errors['pass'] = 'パスワードは50字以下で入力してください';
   }
   return $errors;

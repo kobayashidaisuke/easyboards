@@ -26,13 +26,13 @@ function validate($thread)
   //タイトル
   if (!strlen($thread['title'])) {
     $errors['title'] = 'タイトルを入力してください' . PHP_EOL;
-  } elseif (mb_strlen($thread['title']) > 50) {
+  } elseif (mb_strlen($thread['title']) > MAXIMUM_LENGTH_50) {
     $errors['title'] = '50文字以下でタイトルを入力してください' . PHP_EOL;
   }
   //詳細
   if (!strlen($thread['summary'])) {
     $errors['summary'] = '詳細を入力してください' . PHP_EOL;
-  } elseif (mb_strlen($thread['summary']) > 50) {
+  } elseif (mb_strlen($thread['summary']) > MAXIMUM_LENGTH_50) {
     $errors['summary'] = '50文字以下で詳細を入力してください' . PHP_EOL;
   }
   return $errors;
