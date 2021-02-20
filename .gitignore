@@ -4,3 +4,5 @@ src/*.env
 docker-compose.yml
 Dockerfile
 docker/
+# Mac
+.DS_Store
