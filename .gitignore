@@ -7,4 +7,4 @@ docker/
 # Mac
 .DS_Store
 # 画像など
-src/gallery
+src/gallery/
