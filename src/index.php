@@ -6,12 +6,6 @@ $title = '掲示板';
 $login = [
   'email' => '',
 ];
-$signup = [
-  'email' => '',
-  'email-2' => '',
-  'nickname' => ''
-];
-
 $errors = [];
 $message = '';
 

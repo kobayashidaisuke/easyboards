@@ -4,7 +4,7 @@ require_once __DIR__ . '/lib/mysqli.php';
 include_once __DIR__ . '/lib/escape.php';
 session_start();
 
-function insertThread($link, $thread)
+function insertThread($link, $thread): void
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -20,7 +20,7 @@ function insertThread($link, $thread)
   }
 }
 
-function validate($thread)
+function validate($thread): array
 {
   $errors = [];
   //タイトル
@@ -38,17 +38,20 @@ function validate($thread)
   return $errors;
 }
 
-
-function lastThread($threads)
+function latestThread($threads): int
 {
   for ($i = 0; $i < count($threads); $i++) {
     if ($i === (int)count($threads) - 1) {
-      $lastId = $threads[$i]['id'];
+      $latestId = $threads[$i]['id'];
     }
   }
-
-  return $lastId;
+  return $latestId;
 }
+
+$thread = [
+  'title' => '',
+  'summary' => '',
+];
 
 if (!is_login()) {
   header("location: index.php");
@@ -59,11 +62,6 @@ $is_chkno = isset($_REQUEST["chkno"]) == true && isset($_SESSION["chkno"]) == tr
 //トークンチェック
 $is_token = empty($_POST['token']) || empty($_SESSION['token']) || $_POST['token'] !== $_SESSION['token'];
 
-$thread = [
-  'title' => '',
-  'summary' => ''
-];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($is_chkno) {
     if ($is_token) {
@@ -71,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $thread = [
       'title' => $_POST['title'],
-      'summary' => $_POST['summary']
+      'summary' => $_POST['summary'],
     ];
     //バリデーション処理
     $errors = validate($thread);
@@ -79,9 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $link = dbConnect();
       insertThread($link, $thread);
       $threads = selectThreads($link);
-      $lastId = lastThread($threads);
+      $latestId = latestThread($threads);
       // スレッド画面に遷移
-      header("Location: thread.php?id={$lastId}");
+      header("Location: thread.php?id={$latestId}");
     }
   }
 }

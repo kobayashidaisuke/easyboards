@@ -3,19 +3,7 @@ require_once __DIR__ . '/lib/mysqli.php';
 include_once __DIR__ . '/lib/escape.php';
 session_start();
 
-$login = [
-    'email' => ''
-];
-$signup = [
-    'email' => '',
-    'email-2' => '',
-    'nickname' => ''
-];
-
-$errors = [];
-$message = '';
-
-function searchEmail($link)
+function searchEmail($link): int
 {
     try {
         $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -31,7 +19,7 @@ function searchEmail($link)
     }
 }
 
-function searchNickname($link)
+function searchNickname($link): int
 {
     try {
         $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -47,13 +35,12 @@ function searchNickname($link)
     }
 }
 
-function validate($link)
+function validate($link): array
 {
     $errors = [];
-
     //e-mail
-    $email = searchEmail($link);
-    if ($email > 0) {
+    $emailCount = searchEmail($link);
+    if ($emailCount > 0) {
         $errors['email'] = '指定されたメールアドレスはすでに登録されています';
         return $errors;
     } elseif (!strlen($_POST['email']) || !strlen($_POST['email-2'])) {
@@ -65,10 +52,9 @@ function validate($link)
     } elseif ($_POST['email'] !== $_POST['email-2']) {
         $errors['email'] = "入力したメールアドレスが一致しません";
     }
-
     //ニックネーム
-    $nickname = searchNickname($link);
-    if ($nickname > 0) {
+    $nicknameCount = searchNickname($link);
+    if ($nicknameCount > 0) {
         $errors['nickname'] = '指定されたニックネームはすでに登録されています';
         return $errors;
     } elseif (!isset($_POST['nickname'])) {
@@ -76,18 +62,16 @@ function validate($link)
     } elseif (mb_strlen($_POST['nickname']) > MAXIMUM_LENGTH_50) {
         $errors['nickname'] = 'ニックネームは50字以下で入力してください';
     }
-
     //パスワード
     if (!preg_match("/\A(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}+\z/i", $_POST['password'])) {
         $errors['password'] = 'パスワードは半角英数字をそれぞれ1文字以上含んだ8文字以上で設定してください';
     } elseif (mb_strlen($_POST['password']) > MAXIMUM_LENGTH_50) {
         $errors['password'] = 'パスワードを50字以下で入力してください';
     }
-
     return $errors;
 }
 
-function insertUser($link, $email, $nickname, $password)
+function insertUser($link, $email, $nickname, $password): void
 {
     try {
         $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -106,6 +90,14 @@ function insertUser($link, $email, $nickname, $password)
 
 $title = '登録';
 $option = '';
+$signup = [
+    'email' => '',
+    'email-2' => '',
+    'nickname' => ''
+];
+
+$errors = [];
+$message = '';
 
 //フォーム多重送信を回避
 $is_chkno = isset($_REQUEST["chkno"]) === true && isset($_SESSION["chkno"]) === true && (int)$_REQUEST["chkno"] == $_SESSION["chkno"];

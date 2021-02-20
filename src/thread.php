@@ -4,7 +4,7 @@ require_once __DIR__ . '/lib/escape.php';
 require_once __DIR__ . '/lib/mysqli.php';
 session_start();
 
-function validateStandard($info)
+function validateStandard($info): array
 {
   $errors = [];
   if (!strlen($info['name'])) {
@@ -25,7 +25,7 @@ function validateStandard($info)
   return $errors;
 }
 
-function fileCheck()
+function fileCheck(): array
 {
   $errors = [];
   //エラーチェック
@@ -90,7 +90,7 @@ function fileCheck()
   return $files;
 }
 
-function validateDelete($info)
+function validateDelete($info): array
 {
   $errors = [];
   if (!isset($info['deleteNum'])) {
@@ -102,7 +102,7 @@ function validateDelete($info)
   return $errors;
 }
 
-function validateEdit($info)
+function validateEdit($info): array
 {
   $errors = [];
   if (!isset($info['editNum'])) {
@@ -114,7 +114,7 @@ function validateEdit($info)
   return $errors;
 }
 
-function searchInfo($link, $detail)
+function searchInfo($link, $detail): array
 {
   try {
     $sql = "SELECT id, name, comment, pass, fname, extension, filepass FROM submission where id=:id";
@@ -147,7 +147,7 @@ if (!is_login()) {
 //データベースに接続
 $link = dbConnect();
 //スレッドIDを取得
-$id = isset($_POST['id']) ? $_POST['id'] : $_GET['id'];
+$id = isset($_POST['id']) ? h($_POST['id']) : h($_GET['id']);
 //ファイルが選択された場合
 $is_file = isset($_FILES['upfile']['error']) && is_int($_FILES['upfile']['error']) && $_FILES['upfile']['name'] !== '';
 //フォーム多重送信を回避

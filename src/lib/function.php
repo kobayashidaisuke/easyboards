@@ -1,5 +1,5 @@
 <?php
-function addRecord($link, $info)
+function addRecord($link, $info): void
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -14,14 +14,13 @@ function addRecord($link, $info)
     $sql->bindValue(':pass', $info['pass'], PDO::PARAM_STR);
     $sql->bindValue(':whois', $info['whois'], PDO::PARAM_STR);
     $sql->bindValue(':created_at', $created_at, PDO::PARAM_STR);
-
     $sql->execute();
   } catch (PDOException $e) {
     echo $e->getMessage();
   }
 }
 
-function addImg($link, $info)
+function addImg($link, $info): void
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -39,14 +38,13 @@ function addImg($link, $info)
     $sql->bindValue(':filepass', $info['filepass'], PDO::PARAM_STR);
     $sql->bindValue(':whois', $info['whois'], PDO::PARAM_STR);
     $sql->bindValue(':created_at', $created_at, PDO::PARAM_STR);
-
     $sql->execute();
   } catch (PDOException $e) {
     echo $e->getMessage();
   }
 }
 
-function deleteRecord($link, $num)
+function deleteRecord($link, $num): void
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -60,7 +58,7 @@ function deleteRecord($link, $num)
   }
 }
 
-function editRecord($link, $info)
+function editRecord($link, $info): void
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -90,7 +88,7 @@ function editRecord($link, $info)
   }
 }
 
-function editImg($link, $info)
+function editImg($link, $info): void
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -127,7 +125,7 @@ function editImg($link, $info)
 }
 
 //レスを取得
-function getSubmissionForContents($id, $link)
+function getSubmissionForContents($id, $link): array
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -144,7 +142,7 @@ function getSubmissionForContents($id, $link)
 }
 
 //スレッドを取得
-function getThreadForTitle($id, $link)
+function getThreadForTitle($id, $link): array
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -160,7 +158,7 @@ function getThreadForTitle($id, $link)
   }
 }
 //全スレッドを取得 top.php, thread.php
-function selectThreads($link)
+function selectThreads($link): array
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -176,7 +174,7 @@ function selectThreads($link)
 }
 
 //ログインしていなければ指定のURLに飛べない top.php, newThread.php, thread.php
-function is_login()
+function is_login(): bool
 {
   // セッションのキー：is_loginの値を取得し、判定を行う。
   if (

@@ -4,7 +4,7 @@ include_once __DIR__ . '/lib/escape.php';
 session_start();
 
 //DB内でPOSTされたメールアドレスを検索
-function searchEmailCount($link)
+function searchEmailCount($link): int
 {
   try {
     $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -14,13 +14,13 @@ function searchEmailCount($link)
     $stmt->bindValue(':email', $_POST['email'], PDO::PARAM_INT);
     $stmt->execute();
     $contents = $stmt->fetchAll();
-    return $contents;
+    return $contents[0]['cnt'];
   } catch (PDOException $e) {
     echo $e->getMessage();
   }
 }
 
-function searchEmail($link)
+function searchEmail($link): array
 {
   try {
     $cnt = searchEmailCount($link);
@@ -31,7 +31,7 @@ function searchEmail($link)
     $stmt->bindValue(':email', $_POST['email'], PDO::PARAM_INT);
     $stmt->execute();
     $contents = $stmt->fetchAll();
-    $contents['cnt'] = $cnt[0]['cnt'];
+    $contents['cnt'] = $cnt;
     return $contents;
   } catch (PDOException $e) {
     echo $e->getMessage();
@@ -39,7 +39,7 @@ function searchEmail($link)
 }
 
 //POSTのvalidate
-function validate($emails)
+function validate(array $emails): array
 {
   $errors = [];
 
@@ -65,18 +65,15 @@ function validate($emails)
   return $errors;
 }
 
-function login()
+function login(): void
 {
   $_SESSION['is_login'] = true;
-  return 'ログインしました。';
 }
 
 $title = 'ログイン';
 $login = [
   'email' => '',
 ];
-
-
 $errors = [];
 $message = '';
 
