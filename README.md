@@ -27,7 +27,7 @@
 * 素のPHPでバリデーションからセキュリティ対策をしたこと
 
 ## 環境構築の手順
-* docker composeでappコンテナとdbコンテナを作成、運用
+### docker composeでappコンテナとdbコンテナを作成、運用
 1. docker-compose build
 2. docker-compose up -d
 3. 指定したポート番号にアクセスし、繋がっていることを確認
