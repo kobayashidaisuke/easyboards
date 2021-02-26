@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/lib/function.php';
 require_once __DIR__ . '/lib/escape.php';
+require_once __DIR__ . '/lib/function.php';
 require_once __DIR__ . '/lib/mysqli.php';
 session_start();
 
@@ -150,8 +150,7 @@ $link = dbConnect();
 $id = isset($_POST['id']) ? h($_POST['id']) : h($_GET['id']);
 //ファイルが選択された場合
 $is_file = isset($_FILES['upfile']['error']) && is_int($_FILES['upfile']['error']) && $_FILES['upfile']['name'] !== '';
-//フォーム多重送信を回避
-$is_chkno = isset($_REQUEST["chkno"]) == true && isset($_SESSION["chkno"]) == true && (int)$_REQUEST["chkno"] == $_SESSION["chkno"];
+
 //idの受け取り
 if (isset($_POST['id'])) {
   $postId = h($_POST['id']);
@@ -160,9 +159,6 @@ if (isset($_POST['id'])) {
   $getId = h($_GET['id']);
   $url = "thread.php?id={$getId}";
 }
-
-//トークンチェック
-$is_token = empty($_POST['token']) || empty($_SESSION['token']) || $_POST['token'] !== $_SESSION['token'];
 
 if (
   isset($_SESSION['editNum']) &&
@@ -184,133 +180,134 @@ if (
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if ($is_chkno) {
-    if ($is_token) {
-      throw new Exception('token mismatched');
-    }
-    //新規作成ボタンが押された場合
-    if (isset($_POST['submit'])) {
-      if ($_POST['editPost']) {
-        //ファイルが選択された場合
-        if ($is_file) {
-          $searchInfo = searchInfo($link, $_POST['editPost']);
-          if (!strlen($searchInfo['error'])) {
-            if ($_POST['editPost'] === $searchInfo['id']) {
-              $files = fileCheck($url);
-              if (!count($files['errors'])) {
-                $info = [
-                  'id' => $_POST['id'],
-                  'editPost' => $_POST['editPost'],
-                  'name' => $_POST['name'],
-                  'comment' => $_POST['comment'],
-                  'pass' => $_POST['pass'],
-                  'fname' => $files['fname'],
-                  'extension' => $files['extension'],
-                  'filepass' => $files['filepass'],
-                  'whois' => $_SESSION["NICKNAME"]
-                ];
-                $errors = validateStandard($info);
-                if (!count($errors)) {
-                  editImg($link, $info);
-                  header("Location: $url");
-                }
+  if (!is_chkno()) {
+    header("location: thread.php");
+  }
+  if (!is_token()) {
+    throw new Exception('token mismatched');
+  }
+  //新規作成ボタンが押された場合
+  if (isset($_POST['submit'])) {
+    if ($_POST['editPost']) {
+      //ファイルが選択された場合
+      if ($is_file) {
+        $searchInfo = searchInfo($link, $_POST['editPost']);
+        if (!strlen($searchInfo['error'])) {
+          if ($_POST['editPost'] === $searchInfo['id']) {
+            $files = fileCheck($url);
+            if (!count($files['errors'])) {
+              $info = [
+                'id' => $_POST['id'],
+                'editPost' => $_POST['editPost'],
+                'name' => $_POST['name'],
+                'comment' => $_POST['comment'],
+                'pass' => $_POST['pass'],
+                'fname' => $files['fname'],
+                'extension' => $files['extension'],
+                'filepass' => $files['filepass'],
+                'whois' => $_SESSION["NICKNAME"]
+              ];
+              $errors = validateStandard($info);
+              if (!count($errors)) {
+                editImg($link, $info);
+                header("Location: $url");
               }
-            } else {
-              $errors['editPost'] = '編集する番号を正しく入力してください';
             }
-          }
-        } else {
-          //編集番号と等しい時、新しいデータを入れ直す
-          $searchInfo = searchInfo($link, $_POST['editPost']);
-          if (!strlen($searchInfo['error'])) {
-            $info = [
-              'id' => $_POST['id'],
-              'editPost' => $_POST['editPost'],
-              'name' => $_POST['name'],
-              'comment' => $_POST['comment'],
-              'pass' => $_POST['pass'],
-              'whois' => $_SESSION["NICKNAME"]
-            ];
-            $errors = validateStandard($info);
-            if (!count($errors)) {
-              editRecord($link, $info);
-              header("Location: $url");
-            }
+          } else {
+            $errors['editPost'] = '編集する番号を正しく入力してください';
           }
         }
-      } elseif ($is_file) {
-        $files = fileCheck($url);
-        if (!count($files['errors'])) {
+      } else {
+        //編集番号と等しい時、新しいデータを入れ直す
+        $searchInfo = searchInfo($link, $_POST['editPost']);
+        if (!strlen($searchInfo['error'])) {
           $info = [
             'id' => $_POST['id'],
+            'editPost' => $_POST['editPost'],
             'name' => $_POST['name'],
             'comment' => $_POST['comment'],
             'pass' => $_POST['pass'],
-            'fname' => $files['fname'],
-            'extension' => $files['extension'],
-            'filepass' => $files['filepass'],
             'whois' => $_SESSION["NICKNAME"]
           ];
           $errors = validateStandard($info);
           if (!count($errors)) {
-            addImg($link, $info);
+            editRecord($link, $info);
             header("Location: $url");
           }
         }
-      } else {
-        //新規投稿の場合
+      }
+    } elseif ($is_file) {
+      $files = fileCheck($url);
+      if (!count($files['errors'])) {
         $info = [
           'id' => $_POST['id'],
           'name' => $_POST['name'],
           'comment' => $_POST['comment'],
           'pass' => $_POST['pass'],
+          'fname' => $files['fname'],
+          'extension' => $files['extension'],
+          'filepass' => $files['filepass'],
           'whois' => $_SESSION["NICKNAME"]
         ];
         $errors = validateStandard($info);
         if (!count($errors)) {
-          addRecord($link, $info);
+          addImg($link, $info);
           header("Location: $url");
         }
       }
-    }
-
-    if (isset($_POST['delete'])) {
+    } else {
+      //新規投稿の場合
       $info = [
-        'deleteNum' => $_POST['deleteNum'],
-        'deletePass' => $_POST['deletePass']
+        'id' => $_POST['id'],
+        'name' => $_POST['name'],
+        'comment' => $_POST['comment'],
+        'pass' => $_POST['pass'],
+        'whois' => $_SESSION["NICKNAME"]
       ];
-      $errors = validateDelete($info);
+      $errors = validateStandard($info);
       if (!count($errors)) {
-        $deleteInfo = searchInfo($link, $_POST['deleteNum']);
-        if (!strlen($deleteInfo['error'])) {
-          if ($_POST['deletePass'] === $deleteInfo['pass']) {
-            deleteRecord($link, $_POST['deleteNum']);
-            header("Location: $url");
-          } else {
-            $errors['pass'] = 'パスワードが一致しません';
-          }
+        addRecord($link, $info);
+        header("Location: $url");
+      }
+    }
+  }
+
+  if (isset($_POST['delete'])) {
+    $info = [
+      'deleteNum' => $_POST['deleteNum'],
+      'deletePass' => $_POST['deletePass']
+    ];
+    $errors = validateDelete($info);
+    if (!count($errors)) {
+      $deleteInfo = searchInfo($link, $_POST['deleteNum']);
+      if (!strlen($deleteInfo['error'])) {
+        if ($_POST['deletePass'] === $deleteInfo['pass']) {
+          deleteRecord($link, $_POST['deleteNum']);
+          header("Location: $url");
+        } else {
+          $errors['pass'] = 'パスワードが一致しません';
         }
       }
     }
+  }
 
-    if (isset($_POST['edit'])) {
-      $info = [
-        'editNum' => $_POST['editNum'],
-        'editPass' => $_POST['editPass']
-      ];
-      $errors = validateEdit($info);
-      if (!count($errors)) {
-        $editInfo = searchInfo($link, $_POST['editNum']);
-        if (!strlen($editInfo['error'])) {
-          if ($_POST['editPass'] === $editInfo['pass']) {
-            $_SESSION['editNum'] = $editInfo['id'];
-            $_SESSION['editName'] = $editInfo['name'];
-            $_SESSION['editComment'] = $editInfo['comment'];
-            $_SESSION['editPass'] = $editInfo['pass'];
-            header("Location: $url");
-          } else {
-            $errors['pass'] = 'パスワードが一致しません';
-          }
+  if (isset($_POST['edit'])) {
+    $info = [
+      'editNum' => $_POST['editNum'],
+      'editPass' => $_POST['editPass']
+    ];
+    $errors = validateEdit($info);
+    if (!count($errors)) {
+      $editInfo = searchInfo($link, $_POST['editNum']);
+      if (!strlen($editInfo['error'])) {
+        if ($_POST['editPass'] === $editInfo['pass']) {
+          $_SESSION['editNum'] = $editInfo['id'];
+          $_SESSION['editName'] = $editInfo['name'];
+          $_SESSION['editComment'] = $editInfo['comment'];
+          $_SESSION['editPass'] = $editInfo['pass'];
+          header("Location: $url");
+        } else {
+          $errors['pass'] = 'パスワードが一致しません';
         }
       }
     }

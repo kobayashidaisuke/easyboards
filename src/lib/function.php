@@ -186,3 +186,25 @@ function is_login(): bool
   }
   return $is_login;
 }
+
+//フォーム多重送信を回避
+function is_chkno(): bool
+{
+  if (isset($_REQUEST["chkno"]) === true && isset($_SESSION["chkno"]) === true && (int)$_REQUEST["chkno"] == $_SESSION["chkno"]) {
+    $is_chkno = true;
+  } else {
+    $is_chkno = false;
+  }
+  return $is_chkno;
+}
+
+//トークンチェック
+function is_token(): bool
+{
+  if (empty($_POST['token']) || empty($_SESSION['token']) || $_POST['token'] !== $_SESSION['token']) {
+    $is_token = false;
+  } else {
+    $is_token = true;
+  }
+  return $is_token;
+}

@@ -1,7 +1,7 @@
 <?php
+require_once __DIR__ . '/lib/escape.php';
 require_once __DIR__ . '/lib/function.php';
 require_once __DIR__ . '/lib/mysqli.php';
-include_once __DIR__ . '/lib/escape.php';
 session_start();
 
 function insertThread($link, $thread): void
@@ -57,30 +57,26 @@ if (!is_login()) {
   header("location: index.php");
 }
 
-//フォーム多重送信を回避
-$is_chkno = isset($_REQUEST["chkno"]) == true && isset($_SESSION["chkno"]) == true && (int)$_REQUEST["chkno"] == $_SESSION["chkno"];
-//トークンチェック
-$is_token = empty($_POST['token']) || empty($_SESSION['token']) || $_POST['token'] !== $_SESSION['token'];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if ($is_chkno) {
-    if ($is_token) {
-      throw new Exception('token mismatched');
-    }
-    $thread = [
-      'title' => $_POST['title'],
-      'summary' => $_POST['summary'],
-    ];
-    //バリデーション処理
-    $errors = validate($thread);
-    if (!count($errors)) {
-      $link = dbConnect();
-      insertThread($link, $thread);
-      $threads = selectThreads($link);
-      $latestId = latestThread($threads);
-      // スレッド画面に遷移
-      header("Location: thread.php?id={$latestId}");
-    }
+  if (!is_chkno()) {
+    header("location: newThread.php");
+  }
+  if (!is_token()) {
+    throw new Exception('token mismatched');
+  }
+  $thread = [
+    'title' => $_POST['title'],
+    'summary' => $_POST['summary'],
+  ];
+  //バリデーション処理
+  $errors = validate($thread);
+  if (!count($errors)) {
+    $link = dbConnect();
+    insertThread($link, $thread);
+    $threads = selectThreads($link);
+    $latestId = latestThread($threads);
+    // スレッド画面に遷移
+    header("Location: thread.php?id={$latestId}");
   }
 }
 

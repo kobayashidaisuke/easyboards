@@ -1,7 +1,6 @@
 <?php
-require_once __DIR__ . '/lib/function.php';
+require_once __DIR__ . '/lib/escape.php';
 require_once __DIR__ . '/lib/mysqli.php';
-include_once __DIR__ . '/lib/escape.php';
 session_start();
 
 

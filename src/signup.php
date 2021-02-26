@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__ . '/lib/escape.php';
+require_once __DIR__ . '/lib/function.php';
 require_once __DIR__ . '/lib/mysqli.php';
-include_once __DIR__ . '/lib/escape.php';
+
 session_start();
 
 function searchEmail($link): int
@@ -99,17 +101,12 @@ $signup = [
 $errors = [];
 $message = '';
 
-//フォーム多重送信を回避
-$is_chkno = isset($_REQUEST["chkno"]) === true && isset($_SESSION["chkno"]) === true && (int)$_REQUEST["chkno"] == $_SESSION["chkno"];
-//トークンチェック
-$is_token = empty($_POST['token']) || empty($_SESSION['token']) || $_POST['token'] !== $_SESSION['token'];
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($is_chkno) {
-        if ($is_token) {
+        if (!is_chkno()) {
+            header("location: signup.php");
+        }
+        if (!is_token()) {
             throw new Exception('token mismatched');
-            return;
         }
         $link = dbConnect();
         $errors = validate($link);
@@ -128,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $signup['email-2'] = $_POST['email-2'];
             $signup['nickname'] = $_POST['nickname'];
         }
-    }
+
 }
 
 //新しい照合番号を発番

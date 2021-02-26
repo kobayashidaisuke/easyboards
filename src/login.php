@@ -1,6 +1,7 @@
 <?php
+require_once __DIR__ . '/lib/escape.php';
+require_once __DIR__ . '/lib/function.php';
 require_once __DIR__ . '/lib/mysqli.php';
-include_once __DIR__ . '/lib/escape.php';
 session_start();
 
 //DB内でPOSTされたメールアドレスを検索
@@ -77,28 +78,23 @@ $login = [
 $errors = [];
 $message = '';
 
-//フォーム多重送信を回避
-$is_chkno = isset($_REQUEST["chkno"]) === true && isset($_SESSION["chkno"]) === true && (int)$_REQUEST["chkno"] === $_SESSION["chkno"];
-//トークンチェック
-$is_token = empty($_POST['token']) || empty($_SESSION['token']) || $_POST['token'] !== $_SESSION['token'];
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if ($is_chkno) {
-    if ($is_token) {
-      throw new Exception('token mismatched');
-    }
-    $link = dbConnect();
-    $emails = searchEmail($link);
-    $errors = validate($emails);
-    if (!count($errors)) {
-      session_regenerate_id(true); //session_idを新しく生成し、置き換える
-      $_SESSION['NICKNAME'] = $emails[0]['nickname']; //パスワード確認後sessionにニックネームを渡す
-      login();
-      header('Location: top.php');
-    } else {
-      $login['email'] = $_POST['email'];
-    }
+  if (!is_chkno()) {
+    header("location: login.php");
+  }
+  if (!is_token()) {
+    throw new Exception('token mismatched');
+  }
+  $link = dbConnect();
+  $emails = searchEmail($link);
+  $errors = validate($emails);
+  if (!count($errors)) {
+    session_regenerate_id(true); //session_idを新しく生成し、置き換える
+    $_SESSION['NICKNAME'] = $emails[0]['nickname']; //パスワード確認後sessionにニックネームを渡す
+    login();
+    header('Location: top.php');
+  } else {
+    $login['email'] = $_POST['email'];
   }
 }
 
