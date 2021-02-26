@@ -305,7 +305,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $_SESSION['editName'] = $editInfo['name'];
           $_SESSION['editComment'] = $editInfo['comment'];
           $_SESSION['editPass'] = $editInfo['pass'];
-          header("Location: $url");
+          $form = '#form';
+          header("Location: $url . $form");
         } else {
           $errors['pass'] = 'パスワードが一致しません';
         }

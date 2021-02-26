@@ -1,21 +1,2 @@
 <?php
-include_once __DIR__ . '/lib/escape.php';
-session_start();
-
-$title = '掲示板';
-$login = [
-  'email' => '',
-];
-$errors = [];
-$message = '';
-
-
-//新しい照合番号を発番
-$_SESSION['chkno'] = $chkno = mt_rand();
-//トークンの生成
-$_SESSION['token'] = $token = bin2hex(openssl_random_pseudo_bytes(16));
-
-
-$option = '';
-$content = __DIR__ . '/views/index.php';
-include __DIR__ . '/views/layout.php';
+include __DIR__ . '/views/index.php';

@@ -104,5 +104,5 @@ $_SESSION['chkno'] = $chkno = mt_rand();
 $_SESSION['token'] = $token = bin2hex(openssl_random_pseudo_bytes(16));
 
 $option = '';
-$content = __DIR__ . '/views/index.php';
+$content = __DIR__ . '/views/login.php';
 include __DIR__ . '/views/layout.php';

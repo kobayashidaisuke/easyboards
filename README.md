@@ -1,4 +1,4 @@
-# スレッド式掲示板
+# スレッド式掲示板（コミュコミュ！）
 
 ## アプリ概要
 
@@ -39,6 +39,9 @@
 3. 指定したポート番号にアクセスし、繋がっていることを確認
 
 ## デモ画面
+### トップ画面
+<img width="1680" alt="トップ画面" src="https://user-images.githubusercontent.com/62587652/109343099-25483b00-78b0-11eb-95cd-50429adc6454.png">
+
 ### ログイン画面
 <img width="1680" alt="ログイン画面" src="https://user-images.githubusercontent.com/62587652/108823823-497fef80-7604-11eb-8385-43ed84f2a1da.png">
 

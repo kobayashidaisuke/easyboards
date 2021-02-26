@@ -1,5 +1,5 @@
     <div class="row">
-        <div class="col-md-2 bg-light mb-5">
+        <div class="col-md-2 col-sm-12 mb-5 bg-light p-3">
             <div class="mb-4">
                 <h3 class="h4">使い方</h3>
                 <ol>
@@ -18,7 +18,7 @@
                 </ol>
             </div>
         </div>
-        <div class="col-md-7 col-sm-12">
+        <div class="col-md-7 col-sm-12 p-3">
             <?php if (isset($errors)) : ?>
                 <section>
                     <ul class="text-danger">
@@ -56,7 +56,7 @@
                     <hr>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <form method="POST" action="thread.php" enctype="multipart/form-data" class="bg-light p-4 mt-4">
+            <form method="POST" action="thread.php" enctype="multipart/form-data" class="bg-light mt-4 mb-4" id="form">
                 <input name="chkno" type="hidden" value="<?= h($chkno); ?>">
                 <input name="token" type="hidden" value="<?= h($token); ?>">
                 <h3 class="h4">コメントする</h3>
@@ -83,9 +83,9 @@
                 <a href="#top" class="btn btn-secondary">ページトップへ</a>
             </form>
         </div>
-        <section class="col-md-3 col-sm-12 mb-4 bg-light">
+        <section class="col-md-3 col-sm-12 mb-4 bg-light p-3">
             <h4 class="h4 mb-4">他のスレッド</h4>
-            <a href="top.php" class="btn btn-primary d-block mb-2">スレッド一覧に戻る</a>
+            <a href="top.php" class="btn btn-primary d-block mb-4">スレッド一覧に戻る</a>
             <?php if (count($selectThreads)) : ?>
                 <ol>
                     <?php foreach ($selectThreads as $thread) : ?>

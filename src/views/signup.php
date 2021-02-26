@@ -20,19 +20,19 @@
                 <input name="token" type="hidden" value="<?= h($token); ?>">
                 <div class="form-group mb-4">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" class="form-control" value="<?= h($signup['email']); ?>">
+                    <input type="email" name="email" id="email" class="form-control" inputmode="email" value="<?= h($signup['email']); ?>">
                 </div>
                 <div class="form-group mb-4">
                     <label for="email-2">Email&nbsp;(間違い防止のため、2度入力してください)</label>
-                    <input type="email" name="email-2" id="email-2" class="form-control" value="<?= h($signup['email-2']); ?>">
+                    <input type="email" name="email-2" id="email-2" class="form-control" inputmode="email" value="<?= h($signup['email-2']); ?>">
                 </div>
                 <div class="form-group mb-4">
                     <label for="nickname">ニックネーム</label>
-                    <input type="text" name="nickname" id="nickname" class="form-control" value="<?= h($signup['nickname']); ?>">
+                    <input type="text" name="nickname" id="nickname" class="form-control" inputmode="email" value="<?= h($signup['nickname']); ?>">
                 </div>
                 <div class="form-group mb-4">
                     <label for="password">Password</label>
-                    <input type="text" name="password" class="form-control" id="password">
+                    <input type="password" name="password" class="form-control" id="password" inputmode="search">
                 </div>
                 <input type="submit" class="btn btn-primary mb-4 text-light" value="登録">
             </form>
